@@ -6,3 +6,13 @@ h1{
   font-family: 'Vollkorn SC', serif;
   font-kerning: .2em;
 }
+
+.palette-container{
+  width: 90%;
+  display: flex;
+}
+
+.palettes{
+  width: 20%;
+  height: 80vh;
+}
