@@ -3,7 +3,6 @@ const generateColor = () => {
 }
 
 const createColorPalette = () => {
-  console.log('here');
   for (let i = 1; i < 6; i++){
     const randomHexColor = generateColor();
     $(`.palette-${i}`).css('background-color', randomHexColor);
@@ -13,3 +12,4 @@ const createColorPalette = () => {
 
 
 $(document).ready(createColorPalette);
+$('.new-palette').on('click', createColorPalette);
