@@ -4,21 +4,23 @@ const generateColor = () => {
 
 const createColorPalette = () => {
   for (let i = 1; i < 6; i++){
-    const randomHexColor = generateColor();
-    $(`.color-${i}`).css('background-color', randomHexColor);
-    $(`.color-${i}-text`).text(randomHexColor);
+    if(!$(`.color-${i}`).hasClass('locked')){
+    const hexColor = generateColor();
+    $(`.color-${i}`).css('background-color', hexColor);
+    $(`.color-${i}-text`).text(hexColor);
   }
+ }
 };
 
 const lockColors = (e) => {
-    const src = $(e.target)
+    const target = $(e.target)
 
-    if(src.attr('src') === './assets/unlocked.png') {
-        src.attr('src', './assets/locked.png')
-        src.closest('.palettes').toggleClass('locked')
+    if(target.attr('src') === './assets/unlocked.png') {
+        target.attr('src', './assets/locked.png')
+        target.closest('.palettes').toggleClass('locked')
     } else {
-        src.attr('src', './assets/unlocked.png')
-        src.closest('.palettes').toggleClass('locked')
+        target.attr('src', './assets/unlocked.png')
+        target.closest('.palettes').toggleClass('locked')
     }
 };
 
