@@ -5,7 +5,7 @@ const generateColor = () => {
 const createColorPalette = () => {
   for (let i = 1; i < 6; i++){
     const randomHexColor = generateColor();
-    $(`.palette-${i}`).css('background-color', randomHexColor);
+    $(`.color-${i}`).css('background-color', randomHexColor);
     $(`.color-${i}-text`).text(randomHexColor);
   }
 };
