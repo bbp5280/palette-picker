@@ -22,6 +22,22 @@ app.get('/api/v1/projects', (request, response) => {
   })
 });
 
+app.get('/api/v1/projects/:id/palettes', (request, response) => {
+  database('palettes').where('project_id', request.params.id).select()
+    .then(palettes => {
+      if(palettes.length) {
+        return response.status(200).json(palettes);
+      } else {
+        return response.status(404).json({
+          error: `Could not find and palettes for this project`
+        })
+      }
+    })
+    .catch( error => {
+      return response.status(500).json({error})
+    })
+})
+
 app.listen(app.get('port'), () => {
   console.log(`${app.locals.title} is running on ${app.get('port')}.`);
 });
