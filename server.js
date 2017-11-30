@@ -60,8 +60,25 @@ app.post('/api/v1/projects/:id/footnotes', (request, response) => {
   let palette = request.body;
   const projectId = request.params.id;
 
-  for (let requiredParameter of ['', ])
-})
+  for (let requiredParameter of ['name', 'color_1', 'color_2',
+    'color_3', 'color_4', 'color_5', 'project_id']) {
+    if (!palette[requiredParameter]) {
+      return response.status(422).json({
+        error: `You are missing the ${requiredParameter} property`
+      });
+    }
+  }
+
+  palette = Object.assign({}, palette, { project_id: projectId });
+
+  database('palettes').insert(palette, 'id')
+    .then(palette => {
+      return response.status(201).json({ id: palette[0]});
+    })
+    .catch(error => {
+      return response.status(500).json({ error });
+    });
+});
 
 app.listen(app.get('port'), () => {
   console.log(`${app.locals.title} is running on ${app.get('port')}.`);
