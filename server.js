@@ -71,6 +71,22 @@ app.post('/api/v1/projects/:id/palettes', (request, response) => {
   });
 });
 
+app.delete('/api/v1/palettes/:id', (request, response) => {
+  const { id } = request.params;
+
+  database('palettes').where({ id }).del()
+    .then(palette => {
+      if (palette) {
+        response.sendStatus(204);
+      } else {
+        response.status(422).json({ error: 'Not Found' });
+      }
+    })
+    .catch(error => {
+      response.status(500).json({ error });
+    });
+});
+
 app.listen(app.get('port'), () => {
   console.log(`${app.locals.title} is running on ${app.get('port')}.`);
 });
