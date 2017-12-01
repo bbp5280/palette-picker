@@ -178,4 +178,5 @@ $('.palette-container').on('click', '.lock-img', (event) => lockColors(event));
 $('.submit-project').on('click', createProject);
 $('.create-palette-btn').on('click', addPalette);
 $('.projects-container').on('click', '.trash-img', (event) => deletePalette(event));
-$('.projects-container').on('click', '.small-palette-container', (event) => setSmallPaletteToMain(event));
+$('.projects-container').on('click', '.small-palette-container',
+  (event) => setSmallPaletteToMain(event));
