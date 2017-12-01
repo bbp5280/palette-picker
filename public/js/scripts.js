@@ -66,11 +66,16 @@ const buildProjectPalettes = (palettes) => {
       <div class="aside-palette">
       <p class="palette-name">${palette.name}</p>
       <div class="small-palette-container" id="${palette.id}">
-      <div class="small-palettes" style='background-color: ${palette.color_1}'></div>
-      <div class="small-palettes" style='background-color: ${palette.color_2}'></div>
-      <div class="small-palettes" style='background-color: ${palette.color_3}'></div>
-      <div class="small-palettes" style='background-color: ${palette.color_4}'></div>
-      <div class="small-palettes" style='background-color: ${palette.color_5}'></div>
+      <div class="small-palettes small-palettes-color-1"
+        style='background-color: ${palette.color_1}'></div>
+      <div class="small-palettes small-palettes-color-2"
+        style='background-color: ${palette.color_2}'></div>
+      <div class="small-palettes small-palettes-color-3"
+        style='background-color: ${palette.color_3}'></div>
+      <div class="small-palettes small-palettes-color-4"
+        style='background-color: ${palette.color_4}'></div>
+      <div class="small-palettes small-palettes-color-5"
+        style='background-color: ${palette.color_5}'></div>
       <img src="./assets/trash-icon.png" alt="Delete pallete from project" class="trash-img">
      </div>
      </div>`);
@@ -124,11 +129,16 @@ const buildProjectPalette = (palette) => {
       <div class="aside-palette">
       <p class="palette-name">${palette.id.name}</p>
       <div class="small-palette-container" id="${palette.id.id}">
-      <div class="small-palettes" style='background-color: ${palette.id.color_1}'></div>
-      <div class="small-palettes" style='background-color: ${palette.id.color_2}'></div>
-      <div class="small-palettes" style='background-color: ${palette.id.color_3}'></div>
-      <div class="small-palettes" style='background-color: ${palette.id.color_4}'></div>
-      <div class="small-palettes" style='background-color: ${palette.id.color_5}'></div>
+      <div class="small-palettes small-palettes-color-1"
+        style='background-color: ${palette.id.color_1}'></div>
+      <div class="small-palettes small-palettes-color-2"
+        style='background-color: ${palette.id.color_2}'></div>
+      <div class="small-palettes small-palettes-color-3"
+        style='background-color: ${palette.id.color_3}'></div>
+      <div class="small-palettes small-palettes-color-4"
+        tyle='background-color: ${palette.id.color_4}'></div>
+      <div class="small-palettes small-palettes-color-5"
+        style='background-color: ${palette.id.color_5}'></div>
       <img src="./assets/trash-icon.png" alt="Delete pallete from project" class="trash-img">
      </div>
      </div>
@@ -137,7 +147,7 @@ const buildProjectPalette = (palette) => {
 
 const deletePalette = (event) => {
   const paletteId = $(event.target).closest('.small-palette-container').attr('id');
-  
+
   fetch(`/api/v1/palettes/${paletteId}`, {
     method: 'DELETE'
   })
@@ -145,6 +155,18 @@ const deletePalette = (event) => {
     .catch( error => console.log(error));
 
   $(event.target).closest('.aside-palette').remove();
+};
+
+const setSmallPaletteToMain = (event) => {
+  const paletteForMain = event.target.closest('.small-palette-container');
+
+  for (let i = 1; i < 6; i++) {
+    const color = $(paletteForMain).find(`.small-palettes-color-${i}`).css('background-color');
+
+    $(`.color-${i}`).css('background-color', color);
+    $(`.color-${i}-text`).text(color);
+  }
+
 };
 
 $(document).ready(() => {
@@ -156,3 +178,4 @@ $('.palette-container').on('click', '.lock-img', (event) => lockColors(event));
 $('.submit-project').on('click', createProject);
 $('.create-palette-btn').on('click', addPalette);
 $('.projects-container').on('click', '.trash-img', (event) => deletePalette(event));
+$('.projects-container').on('click', '.small-palette-container', (event) => setSmallPaletteToMain(event));
