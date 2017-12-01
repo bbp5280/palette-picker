@@ -12,8 +12,19 @@ h1{
   font-kerning: .2em;
 }
 
+aside{
+  display: inline-block;
+  width: 19%;
+  float: right;
+}
+
+.palette-section{
+  width: 78%;
+  display: inline-block;
+}
+
 .palette-container{
-  width: 85%;
+  width: 100%;
   display: flex;
 }
 

@@ -30,6 +30,7 @@ const getProjects = () => {
     .then(projects => {
       buildProjects(projects);
       getProjectPalettes(projects);
+      projectsDropdown(projects);
     })
     .catch(error => console.log(error));
 };
@@ -40,6 +41,12 @@ const buildProjects = (projects) => {
       <h2>${project.project_name}</h2>
       <div class='project-palette-container-${project.id} project-palettes'></div>
     </div>`);
+  });
+};
+
+const projectsDropdown = (projects) => {
+  projects.forEach(project => {
+    $('.project-select').append(`<option value=${project.id}>${project.project_name}</option>`);
   });
 };
 
