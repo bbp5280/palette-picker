@@ -64,7 +64,7 @@ app.post('/api/v1/projects/:id/palettes', (request, response) => {
 
   palette = Object.assign({}, palette, {project_id: projectId});
 
-  database('palettes').insert(palette, 'id').then(palette => {
+  database('palettes').insert(palette, '*').then(palette => {
     return response.status(201).json({id: palette[0]});
   }).catch(error => {
     return response.status(500).json({error});

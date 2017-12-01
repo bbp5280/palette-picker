@@ -14,10 +14,11 @@
     <section class="palette-section">
       <button type="button" name="button" class="new-palette">New Palette</button>
       <form class="save-pallet" action="index.html" method="post">
-        <input type="text" class="palette-name" placeholder="Name Your Palette">
-        <select class="project-select" name="Projects">
+        <input type="text" class="palette-name-input" placeholder="Name Your Palette">
+        <select class="project-select" value="Select Project">
         </select>
-        <input type="submit" name="" value="Create Palette">
+        <!-- <input type="submit" name="" value="Create Palette"> -->
+        <button type="button" name="button" class="create-palette-btn">Create Palette</button>
       </form>
       <div class="palette-container">
         <div class="color-1 palettes">
@@ -45,7 +46,7 @@
     <aside class="projects-container">
       <form class="projects-form">
         <input type="text" placeholder="Project Name" class="project-name-input">
-        <input type="submit" name="" value="Create Project" class="submit-project">
+        <button type="button" class="submit-project" name="button">Create Project</button>
       </form>
 
     </aside>

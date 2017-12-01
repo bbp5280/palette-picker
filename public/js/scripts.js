@@ -45,7 +45,7 @@ const buildProject = (project) => {
 };
 
 const addProjectDropdown = (project) => {
-  $('.project-select').append(`<option value=${project.id}>${project.project_name}</option>`);
+  $('.project-select').append(`<option value='${project.id}'>${project.project_name}</option>`);
 };
 
 const getProjectPalettes = (projects) => {
@@ -60,7 +60,7 @@ const getProjectPalettes = (projects) => {
   });
 };
 
-const buildProjectPalettes = (palettes, project) => {
+const buildProjectPalettes = (palettes) => {
   palettes.forEach(palette => {
     $(`.project-palette-container-${palette.project_id}`).append(`
       <p class="palette-name">${palette.name}</p>
@@ -74,8 +74,7 @@ const buildProjectPalettes = (palettes, project) => {
   });
 };
 
-const createProject = (event) => {
-  event.preventDefault();
+const createProject = () => {
   const newProject = $('.project-name-input').val();
 
   fetch('/api/v1/projects', {
@@ -91,9 +90,44 @@ const createProject = (event) => {
       buildProject(parsedData);
       addProjectDropdown(parsedData);
     })
-    .cath(error => console.log(error));
-    
+    .catch(error => console.log(error));
+
   $('.project-name-input').val('');
+};
+
+const addPalette = () => {
+  const palettePostBody = {
+    name: $('.palette-name-input').val(),
+    project_id: $('.project-select').val(),
+    color_1: $('.color-1-text').text(),
+    color_2: $('.color-2-text').text(),
+    color_3: $('.color-3-text').text(),
+    color_4: $('.color-4-text').text(),
+    color_5: $('.color-5-text').text()
+  };
+  console.log(palettePostBody);
+  fetch(`/api/v1/projects/${palettePostBody.project_id}/palettes`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json'},
+    body: JSON.stringify(palettePostBody)
+  })
+    .then(response => response.json())
+    .then(parsedData => buildProjectPalette(parsedData))
+    .catch(error => console.log(error));
+  $('.palette-name-input').val('');
+};
+
+const buildProjectPalette = (palette) => {
+  console.log(palette.id.project_id);
+  return  $(`.project-palette-container-${palette.id.project_id}`).append(`
+      <p class="palette-name">${palette.id.name}</p>
+      <div class="small-palette-container">
+      <div class="small-palettes" style='background-color: ${palette.id.color_1}'></div>
+      <div class="small-palettes" style='background-color: ${palette.id.color_2}'></div>
+      <div class="small-palettes" style='background-color: ${palette.id.color_3}'></div>
+      <div class="small-palettes" style='background-color: ${palette.id.color_4}'></div>
+      <div class="small-palettes" style='background-color: ${palette.id.color_5}'></div>
+      </div>`);
 };
 
 $(document).ready(() => {
@@ -102,4 +136,5 @@ $(document).ready(() => {
 });
 $('.new-palette').on('click', createColorPalette);
 $('.palette-container').on('click', '.lock-img', (event) => lockColors(event));
-$('.submit-project').on('click', (event) => createProject(event));
+$('.submit-project').on('click', createProject);
+$('.create-palette-btn').on('click', addPalette);
