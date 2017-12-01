@@ -63,14 +63,17 @@ const getProjectPalettes = (projects) => {
 const buildProjectPalettes = (palettes) => {
   palettes.forEach(palette => {
     $(`.project-palette-container-${palette.project_id}`).append(`
+      <div class="aside-palette">
       <p class="palette-name">${palette.name}</p>
-      <div class="small-palette-container">
+      <div class="small-palette-container" id="${palette.id}">
       <div class="small-palettes" style='background-color: ${palette.color_1}'></div>
       <div class="small-palettes" style='background-color: ${palette.color_2}'></div>
       <div class="small-palettes" style='background-color: ${palette.color_3}'></div>
       <div class="small-palettes" style='background-color: ${palette.color_4}'></div>
       <div class="small-palettes" style='background-color: ${palette.color_5}'></div>
-    </div>`);
+      <img src="./assets/trash-icon.png" alt="Delete pallete from project" class="trash-img">
+     </div>
+     </div>`);
   });
 };
 
@@ -105,7 +108,6 @@ const addPalette = () => {
     color_4: $('.color-4-text').text(),
     color_5: $('.color-5-text').text()
   };
-  console.log(palettePostBody);
   fetch(`/api/v1/projects/${palettePostBody.project_id}/palettes`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json'},
@@ -118,16 +120,31 @@ const addPalette = () => {
 };
 
 const buildProjectPalette = (palette) => {
-  console.log(palette.id.project_id);
   return  $(`.project-palette-container-${palette.id.project_id}`).append(`
+      <div class="aside-palette">
       <p class="palette-name">${palette.id.name}</p>
-      <div class="small-palette-container">
+      <div class="small-palette-container" id="${palette.id.id}">
       <div class="small-palettes" style='background-color: ${palette.id.color_1}'></div>
       <div class="small-palettes" style='background-color: ${palette.id.color_2}'></div>
       <div class="small-palettes" style='background-color: ${palette.id.color_3}'></div>
       <div class="small-palettes" style='background-color: ${palette.id.color_4}'></div>
       <div class="small-palettes" style='background-color: ${palette.id.color_5}'></div>
-      </div>`);
+      <img src="./assets/trash-icon.png" alt="Delete pallete from project" class="trash-img">
+     </div>
+     </div>
+     `);
+};
+
+const deletePalette = (event) => {
+  const paletteId = $(event.target).closest('.small-palette-container').attr('id');
+  
+  fetch(`/api/v1/palettes/${paletteId}`, {
+    method: 'DELETE'
+  })
+    .then( () => $(`.${paletteId}`).remove())
+    .catch( error => console.log(error));
+
+  $(event.target).closest('.aside-palette').remove();
 };
 
 $(document).ready(() => {
@@ -138,3 +155,4 @@ $('.new-palette').on('click', createColorPalette);
 $('.palette-container').on('click', '.lock-img', (event) => lockColors(event));
 $('.submit-project').on('click', createProject);
 $('.create-palette-btn').on('click', addPalette);
+$('.projects-container').on('click', '.trash-img', (event) => deletePalette(event));
