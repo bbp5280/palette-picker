@@ -11,11 +11,13 @@
     <header>
       <h1>Palette Picker</h1>
     </header>
-    <section class="pallet-section">
+    <section class="palette-section">
       <button type="button" name="button" class="new-palette">New Palette</button>
       <form class="save-pallet" action="index.html" method="post">
         <input type="text" class="palette-name" placeholder="Name Your Palette">
-        <input type="submit" name="" value="Submit">
+        <select class="project-select" name="Projects">
+        </select>
+        <input type="submit" name="" value="Create Palette">
       </form>
       <div class="palette-container">
         <div class="color-1 palettes">
@@ -41,7 +43,11 @@
     </div>
     </section>
     <aside class="projects-container">
-      
+      <form class="projects-form">
+        <input type="text" placeholder="Project Name" class="project-name-input">
+        <input type="submit" name="" value="Create Project" class="submit-project">
+      </form>
+
     </aside>
     <script src="./js/scripts.js" charset="utf-8"></script>
   </body>

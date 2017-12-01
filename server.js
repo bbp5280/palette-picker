@@ -39,8 +39,8 @@ app.post('/api/v1/projects', (request, response) => {
     return response.status(422).json({error: 'This project is missing a name'});
   }
 
-  database('projects').insert(project, 'id').then(project => {
-    return response.status(201).json({id: project[0]});
+  database('projects').insert(project, '*').then(project => {
+    return response.status(201).json(project[0]);
   }).catch(error => {
     return response.status(500).json(error);
   });
@@ -50,7 +50,7 @@ app.post('/api/v1/projects/:id/palettes', (request, response) => {
   let palette = request.body;
   const projectId = request.params.id;
 
-  for (let requiredParameter of['name',
+  for (let requiredParameter of ['name',
     'color_1',
     'color_2',
     'color_3',
