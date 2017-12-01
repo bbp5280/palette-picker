@@ -74,8 +74,8 @@ const buildProjectPalettes = (palettes, project) => {
   });
 };
 
-const createProject = (event) => {
-  event.preventDefault();
+const createProject = () => {
+  // event.preventDefault();
   const newProject = $('.project-name-input').val();
 
   fetch('/api/v1/projects', {
@@ -91,8 +91,8 @@ const createProject = (event) => {
       buildProject(parsedData);
       addProjectDropdown(parsedData);
     })
-    .cath(error => console.log(error));
-    
+    .catch(error => console.log(error));
+
   $('.project-name-input').val('');
 };
 
@@ -102,4 +102,4 @@ $(document).ready(() => {
 });
 $('.new-palette').on('click', createColorPalette);
 $('.palette-container').on('click', '.lock-img', (event) => lockColors(event));
-$('.submit-project').on('click', (event) => createProject(event));
+$('.submit-project').on('click', createProject);
