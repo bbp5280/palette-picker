@@ -21,3 +21,11 @@ h1{
   width: 20%;
   height: 80vh;
 }
+
+.small-palette-container{
+  display: flex;
+}
+.small-palettes{
+  height: 20px;
+  width: 20px;
+}
