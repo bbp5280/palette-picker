@@ -28,26 +28,24 @@ const getProjects = () => {
   fetch('/api/v1/projects')
     .then(response => response.json())
     .then(projects => {
-      buildProjects(projects);
+      projects.forEach(project => {
+        buildProject(project);
+        addProjectDropdown(project);
+      });
       getProjectPalettes(projects);
-      projectsDropdown(projects);
     })
     .catch(error => console.log(error));
 };
 
-const buildProjects = (projects) => {
-  projects.forEach(project => {
-    $('.projects-container').append(`<div class='project-details'>
+const buildProject = (project) => {
+  $('.projects-container').append(`<div class='project-details'>
       <h2>${project.project_name}</h2>
       <div class='project-palette-container-${project.id} project-palettes'></div>
     </div>`);
-  });
 };
 
-const projectsDropdown = (projects) => {
-  projects.forEach(project => {
-    $('.project-select').append(`<option value=${project.id}>${project.project_name}</option>`);
-  });
+const addProjectDropdown = (project) => {
+  $('.project-select').append(`<option value=${project.id}>${project.project_name}</option>`);
 };
 
 const getProjectPalettes = (projects) => {
@@ -76,6 +74,27 @@ const buildProjectPalettes = (palettes, project) => {
   });
 };
 
+const createProject = (event) => {
+  event.preventDefault();
+  const newProject = $('.project-name-input').val();
+
+  fetch('/api/v1/projects', {
+    method:'POST',
+    headers:{ 'Content-Type': 'application/json'},
+    body: JSON.stringify({ project_name: newProject })
+  }).then(response => {
+    if ( response.status === 201) {
+      return response.json();
+    }
+  })
+    .then(parsedData => {
+      buildProject(parsedData);
+      addProjectDropdown(parsedData);
+    })
+    .cath(error => console.log(error));
+    
+  $('.project-name-input').val('');
+};
 
 $(document).ready(() => {
   createColorPalette();
@@ -83,3 +102,4 @@ $(document).ready(() => {
 });
 $('.new-palette').on('click', createColorPalette);
 $('.palette-container').on('click', '.lock-img', (event) => lockColors(event));
+$('.submit-project').on('click', (event) => createProject(event));
