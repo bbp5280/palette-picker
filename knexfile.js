@@ -12,7 +12,7 @@ module.exports = {
   },
   test: {
     client: 'pg',
-    connection: process.env.DATABASE_URL || 'postgres://localhost/palettepickertest',
+    connection: process.env.DATABASE_URL || 'postgres://localhost/palette_picker_test',
     migrations: {
       directory: './db/migrations'
     },

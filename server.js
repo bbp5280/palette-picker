@@ -57,7 +57,8 @@ app.post('/api/v1/projects/:id/palettes', (request, response) => {
     'color_5',
     'project_id']) {
     if (!palette[requiredParameter]) {
-      return response.status(422).json({error: `You are missing the ${requiredParameter} property`});
+      return response.status(422)
+        .json({error: `You are missing the ${requiredParameter} property`});
     }
   }
   palette = Object.assign({}, palette, {project_id: projectId});
