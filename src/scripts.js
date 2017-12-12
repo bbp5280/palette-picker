@@ -1,3 +1,6 @@
+import { saveOfflineProjects,
+  saveOfflinePalettes} from './indexedDB';
+
 const generateColor = () => {
   return '#' + Math.floor(Math.random()*16777215).toString(16);
 };
@@ -82,8 +85,17 @@ const buildProjectPalettes = (palettes) => {
   });
 };
 
+const saveOfflineProjectsIndexedDB = (project)  => {
+  saveOfflineProjects(project)
+    .then(response => console.log(`successfully loaded project: ${response}`))
+    .catch(error => console.log(`failed to load: ${error}`));
+};
+
 const createProject = () => {
   const newProject = $('.project-name-input').val();
+  const projectForIndexedDB = {id:Date.now(), project_name: newProject};
+
+  saveOfflineProjectsIndexedDB(projectForIndexedDB);
 
   fetch('/api/v1/projects', {
     method:'POST',
@@ -103,6 +115,12 @@ const createProject = () => {
   $('.project-name-input').val('');
 };
 
+const saveOfflinePalettesIndexedDB = (palette)  => {
+  saveOfflinePalettes(palette)
+    .then(response => console.log(`successfully loaded palette: ${response}`))
+    .catch(error => console.log(`failed to load: ${error}`));
+};
+
 const addPalette = () => {
   const palettePostBody = {
     name: $('.palette-name-input').val(),
@@ -113,6 +131,10 @@ const addPalette = () => {
     color_4: $('.color-4-text').text(),
     color_5: $('.color-5-text').text()
   };
+  const palletForInexedDB = Object.assign({}, palettePostBody, {id: Date.now()});
+
+  saveOfflinePalettesIndexedDB(palletForInexedDB);
+
   fetch(`/api/v1/projects/${palettePostBody.project_id}/palettes`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json'},
@@ -180,3 +202,17 @@ $('.create-palette-btn').on('click', addPalette);
 $('.projects-container').on('click', '.trash-img', (event) => deletePalette(event));
 $('.projects-container').on('click', '.small-palette-container',
   (event) => setSmallPaletteToMain(event));
+
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./service-worker.js')
+      .then(registration => {
+        registration;
+        console.log('ServiceWorker registration successful');
+      })
+      .catch(error => {
+        console.log(`ServiceWorker reg failed: ${error}`);
+      });
+  });
+}

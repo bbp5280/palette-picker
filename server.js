@@ -3,6 +3,15 @@ const app = express();
 const bodyParser = require('body-parser');
 const path = require('path');
 
+const requireHTTPS = (request, response, next) => {
+  if (request.header('x-forwarded-proto') !== 'https') {
+    return response.redirect(`https://${request.header('host')}${request.url}`);
+  }
+  next();
+};
+
+if (process.env.NODE_ENV === 'production') { app.use(requireHTTPS); }
+
 app.set('port', process.env.PORT || 3000);
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
