@@ -1,3 +1,5 @@
+import { saveOfflineProjects } from './indexedDB';
+
 const generateColor = () => {
   return '#' + Math.floor(Math.random()*16777215).toString(16);
 };
@@ -82,8 +84,17 @@ const buildProjectPalettes = (palettes) => {
   });
 };
 
+const saveOfflineProjectsIndexedDB = (project)  => {
+  saveOfflineProjects(project)
+    .then(response => console.log(`successfully loaded project: ${response}`))
+    .catch(error => console.log(`failed to load: ${error}`));
+};
+
 const createProject = () => {
   const newProject = $('.project-name-input').val();
+  const projectForIndexedDB = {id:date.Now(), project_name: newProject};
+
+  saveOfflineProjectsIndexedDB(projectForIndexedDB);
 
   fetch('/api/v1/projects', {
     method:'POST',
@@ -180,3 +191,16 @@ $('.create-palette-btn').on('click', addPalette);
 $('.projects-container').on('click', '.trash-img', (event) => deletePalette(event));
 $('.projects-container').on('click', '.small-palette-container',
   (event) => setSmallPaletteToMain(event));
+
+//feature detection
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./service-worker.js')
+      .then(registration => {
+        console.log('ServiceWorker registration successful');
+      })
+      .catch(error => {
+        console.log(`ServiceWorker reg failed: ${error}`);
+      });
+  });//end event listener
+}

@@ -1,0 +1,30 @@
+{
+  "short_name": "palette picker",
+  "name": "Get The Color Right",
+  "background_color": "#87a6b9",
+  "theme_color": "#8aa6b6",
+  "display": "fullscreen",
+  "icons": [
+    {
+      "src": "./assets/icon-48.jpeg",
+      "type": "image/jpeg",
+      "sizes": "48x48"
+    },
+    {
+      "src": "./assets/icon-96.jpeg",
+      "type": "image/jpeg",
+      "sizes": "96x96"
+    },
+    {
+      "src": "./assets/icon-192.jpeg",
+      "type": "image/jpeg",
+      "sizes": "192x192"
+    },
+    {
+      "src": "./assets/icon-512.jpeg",
+      "type": "image/jpeg",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "index.html?launcher=true"
+}
