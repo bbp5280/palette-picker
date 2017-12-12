@@ -1,4 +1,5 @@
-import { saveOfflineProjects } from './indexedDB';
+import { saveOfflineProjects,
+  saveOfflinePalettes} from './indexedDB';
 
 const generateColor = () => {
   return '#' + Math.floor(Math.random()*16777215).toString(16);
@@ -92,7 +93,7 @@ const saveOfflineProjectsIndexedDB = (project)  => {
 
 const createProject = () => {
   const newProject = $('.project-name-input').val();
-  const projectForIndexedDB = {id:date.Now(), project_name: newProject};
+  const projectForIndexedDB = {id:Date.now(), project_name: newProject};
 
   saveOfflineProjectsIndexedDB(projectForIndexedDB);
 
@@ -114,6 +115,12 @@ const createProject = () => {
   $('.project-name-input').val('');
 };
 
+const saveOfflinePalettesIndexedDB = (palette)  => {
+  saveOfflinePalettes(palette)
+    .then(response => console.log(`successfully loaded palette: ${response}`))
+    .catch(error => console.log(`failed to load: ${error}`));
+};
+
 const addPalette = () => {
   const palettePostBody = {
     name: $('.palette-name-input').val(),
@@ -124,6 +131,10 @@ const addPalette = () => {
     color_4: $('.color-4-text').text(),
     color_5: $('.color-5-text').text()
   };
+  const palletForInexedDB = Object.assign({}, palettePostBody, {id: Date.now()});
+
+  saveOfflinePalettesIndexedDB(palletForInexedDB);
+
   fetch(`/api/v1/projects/${palettePostBody.project_id}/palettes`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json'},
@@ -192,15 +203,16 @@ $('.projects-container').on('click', '.trash-img', (event) => deletePalette(even
 $('.projects-container').on('click', '.small-palette-container',
   (event) => setSmallPaletteToMain(event));
 
-//feature detection
+
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('./service-worker.js')
       .then(registration => {
+        registration;
         console.log('ServiceWorker registration successful');
       })
       .catch(error => {
         console.log(`ServiceWorker reg failed: ${error}`);
       });
-  });//end event listener
+  });
 }

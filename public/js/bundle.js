@@ -150,12 +150,12 @@ const buildProjectPalettes = palettes => {
 };
 
 const saveOfflineProjectsIndexedDB = project => {
-  Object(__WEBPACK_IMPORTED_MODULE_0__indexedDB__["a" /* saveOfflineProjects */])(project).then(response => console.log(`successfully loaded project: ${response}`)).catch(error => console.log(`failed to load: ${error}`));
+  Object(__WEBPACK_IMPORTED_MODULE_0__indexedDB__["b" /* saveOfflineProjects */])(project).then(response => console.log(`successfully loaded project: ${response}`)).catch(error => console.log(`failed to load: ${error}`));
 };
 
 const createProject = () => {
   const newProject = $('.project-name-input').val();
-  const projectForIndexedDB = { id: date.Now(), project_name: newProject };
+  const projectForIndexedDB = { id: Date.now(), project_name: newProject };
 
   saveOfflineProjectsIndexedDB(projectForIndexedDB);
 
@@ -175,6 +175,10 @@ const createProject = () => {
   $('.project-name-input').val('');
 };
 
+const saveOfflinePalettesIndexedDB = palette => {
+  Object(__WEBPACK_IMPORTED_MODULE_0__indexedDB__["a" /* saveOfflinePalettes */])(palette).then(response => console.log(`successfully loaded palette: ${response}`)).catch(error => console.log(`failed to load: ${error}`));
+};
+
 const addPalette = () => {
   const palettePostBody = {
     name: $('.palette-name-input').val(),
@@ -185,6 +189,10 @@ const addPalette = () => {
     color_4: $('.color-4-text').text(),
     color_5: $('.color-5-text').text()
   };
+  const palletForInexedDB = Object.assign({}, palettePostBody, { id: Date.now() });
+
+  saveOfflinePalettesIndexedDB(palletForInexedDB);
+
   fetch(`/api/v1/projects/${palettePostBody.project_id}/palettes`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -246,15 +254,15 @@ $('.create-palette-btn').on('click', addPalette);
 $('.projects-container').on('click', '.trash-img', event => deletePalette(event));
 $('.projects-container').on('click', '.small-palette-container', event => setSmallPaletteToMain(event));
 
-//feature detection
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('./service-worker.js').then(registration => {
+      registration;
       console.log('ServiceWorker registration successful');
     }).catch(error => {
       console.log(`ServiceWorker reg failed: ${error}`);
     });
-  }); //end event listener
+  });
 }
 
 /***/ }),
@@ -296,26 +304,32 @@ let db = new __WEBPACK_IMPORTED_MODULE_0_dexie__["a" /* default */]('palettepick
 
 db.version(1).stores({
   projects: 'id, project_name',
-  palettes: 'id, name, color1, color2, color3, color4, color5, projectId'
+  palettes: 'id, name, color_1, color_2, color_3, color_4, color_5, project_id'
 });
 
 const saveOfflineProjects = project => {
   return db.projects.add(project);
 };
-/* harmony export (immutable) */ __webpack_exports__["a"] = saveOfflineProjects;
+/* harmony export (immutable) */ __webpack_exports__["b"] = saveOfflineProjects;
 
 
-// export const saveOfflinePalettes = (palette) => {
-//   return db.palettes.add(palette);
-// };
-//
-// export const loadOfflineProjects = () => {
-//   return db.projects.toArray();
-// };
-//
-// export const loadOfflinePalettes = (id) => {
-//   return db.palettes.where('projectId').equals(id).toArray();
-// };
+const saveOfflinePalettes = palette => {
+  return db.palettes.add(palette);
+};
+/* harmony export (immutable) */ __webpack_exports__["a"] = saveOfflinePalettes;
+
+
+const loadOfflineProjects = () => {
+  return db.projects.toArray();
+};
+/* unused harmony export loadOfflineProjects */
+
+
+const loadOfflinePalettes = id => {
+  return db.palettes.where('projectId').equals(id).toArray();
+};
+/* unused harmony export loadOfflinePalettes */
+
 
 /***/ }),
 /* 3 */
